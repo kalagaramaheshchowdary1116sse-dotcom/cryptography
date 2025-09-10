@@ -1,0 +1,31 @@
+def vigenere_encrypt(text, key):
+    key = key.upper()
+    result, k_index = "", 0
+    for char in text.upper():
+        if char.isalpha():
+            shift = ord(key[k_index % len(key)]) - 65
+            result += chr((ord(char) - 65 + shift) % 26 + 65)
+            k_index += 1
+        else:
+            result += char
+    return result
+
+def vigenere_decrypt(cipher, key):
+    key = key.upper()
+    result, k_index = "", 0
+    for char in cipher.upper():
+        if char.isalpha():
+            shift = ord(key[k_index % len(key)]) - 65
+            result += chr((ord(char) - 65 - shift) % 26 + 65)
+            k_index += 1
+        else:
+            result += char
+    return result
+
+text = input("Enter plaintext: ")
+key = input("Enter key: ")
+
+enc = vigenere_encrypt(text, key)
+print("Encrypted:", enc)
+print("Decrypted:", vigenere_decrypt(enc, key))
+

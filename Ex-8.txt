@@ -1,0 +1,32 @@
+def generate_cipher_alphabet(keyword):
+    keyword = keyword.upper()
+    used = set()
+    cipher = ""
+    for ch in keyword:
+        if ch.isalpha() and ch not in used:
+            cipher += ch
+            used.add(ch)
+    for i in range(26):
+        ch = chr(ord('A') + i)
+        if ch not in used:
+            cipher += ch
+    return cipher
+
+def encrypt(text, cipher):
+    result = ""
+    for ch in text:
+        if ch.isalpha():
+            idx = ord(ch.upper()) - 65
+            result += cipher[idx]
+        else:
+            result += ch
+    return result
+
+keyword = input("Enter keyword: ")
+cipher_alphabet = generate_cipher_alphabet(keyword)
+print("Cipher Alphabet:", cipher_alphabet)
+
+text = input("Enter plaintext: ")
+encrypted = encrypt(text, cipher_alphabet)
+print("Encrypted:", encrypted)
+

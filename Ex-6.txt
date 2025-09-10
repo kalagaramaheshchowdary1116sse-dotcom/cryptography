@@ -1,0 +1,41 @@
+def mod_inverse(a, m=26):
+    a %= m
+    for x in range(1, m):
+        if (a * x) % m == 1:
+            return x
+    return -1
+
+def decrypt_char(ch, a, b):
+    if not ch.isalpha():
+        return ch
+    y = ord(ch.upper()) - 65
+    a_inv = mod_inverse(a)
+    if a_inv == -1:
+        return '?'
+    p = (a_inv * (y - b + 26)) % 26
+    return chr(p + 65)
+
+def solve_key(c1, c2, p1, p2):
+    diffP = (p1 - p2 + 26) % 26
+    diffC = (c1 - c2 + 26) % 26
+    inv = mod_inverse(diffP)
+    if inv == -1:
+        return None
+    a = (diffC * inv) % 26
+    b = (c1 - (a * p1) % 26 + 26) % 26
+    return a, b
+
+# Example
+ciphertext = "BUBUBUBUBU"
+p1, c1 = 4, 1   # assume 'e' -> 'B'
+p2, c2 = 19, 20 # assume 't' -> 'U'
+
+key = solve_key(c1, c2, p1, p2)
+if key:
+    a, b = key
+    print("Recovered Key: a =", a, "b =", b)
+    plaintext = "".join(decrypt_char(ch, a, b) for ch in ciphertext)
+    print("Decrypted Text:", plaintext)
+else:
+    print("Key not found")
+

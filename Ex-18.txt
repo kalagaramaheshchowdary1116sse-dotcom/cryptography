@@ -1,0 +1,42 @@
+# Curve: y^2 = x^3 + ax + b over F_p
+p = 17
+a, b = 2, 2
+
+# Generator point
+G = (5, 1)
+
+def point_add(P, Q):
+    if P is None: return Q
+    if Q is None: return P
+    if P[0] == Q[0] and (P[1] != Q[1] or P[1] == 0):
+        return None
+    if P == Q:
+        m = (3*P[0]*P[0] + a) * pow(2*P[1], -1, p)
+    else:
+        m = (Q[1]-P[1]) * pow(Q[0]-P[0], -1, p)
+    m %= p
+    x = (m*m - P[0] - Q[0]) % p
+    y = (m*(P[0]-x) - P[1]) % p
+    return (x, y)
+
+def scalar_mult(k, P):
+    R = None
+    for i in range(k):
+        R = point_add(R, P)
+    return R
+
+# Alice and Bob
+a_priv = 2
+b_priv = 3
+A_pub = scalar_mult(a_priv, G)
+B_pub = scalar_mult(b_priv, G)
+
+# Shared secret
+Sa = scalar_mult(a_priv, B_pub)
+Sb = scalar_mult(b_priv, A_pub)
+
+print("Alice Public:", A_pub)
+print("Bob Public:", B_pub)
+print("Shared Secret (Alice):", Sa)
+print("Shared Secret (Bob):", Sb)
+

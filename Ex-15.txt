@@ -1,0 +1,24 @@
+def pad(text, block_size=16):
+    padding_len = block_size - (len(text) % block_size)
+    return text + chr(padding_len) * padding_len
+
+def unpad(text):
+    padding_len = ord(text[-1])
+    return text[:-padding_len]
+
+def xor_encrypt_decrypt(text, key):
+    res = ""
+    for i in range(len(text)):
+        res += chr(ord(text[i]) ^ ord(key[i % len(key)]))
+    return res
+
+text = input("Enter plaintext: ")
+key = "abcdefghijklmnop"  # 16 chars
+
+padded = pad(text)
+encrypted = xor_encrypt_decrypt(padded, key)
+decrypted = unpad(xor_encrypt_decrypt(encrypted, key))
+
+print("Encrypted (raw chars):", ''.join(f'{ord(c):02x}' for c in encrypted))
+print("Decrypted:", decrypted)
+

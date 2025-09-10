@@ -1,0 +1,41 @@
+import string
+
+def generate_matrix(key):
+    key = key.upper().replace("J", "I")
+    matrix = []
+    used = set()
+    for char in key + string.ascii_uppercase:
+        if char not in used and char != "J":
+            matrix.append(char)
+            used.add(char)
+    return [matrix[i:i+5] for i in range(0, 25, 5)]
+
+def find_position(matrix, char):
+    for i, row in enumerate(matrix):
+        if char in row:
+            return i, row.index(char)
+    return None
+
+def playfair_encrypt(text, key):
+    matrix = generate_matrix(key)
+    text = text.upper().replace("J", "I").replace(" ", "")
+    if len(text) % 2 != 0:
+        text += "X"
+    result = ""
+    for i in range(0, len(text), 2):
+        a, b = text[i], text[i+1]
+        row1, col1 = find_position(matrix, a)
+        row2, col2 = find_position(matrix, b)
+        if row1 == row2:
+            result += matrix[row1][(col1+1)%5] + matrix[row2][(col2+1)%5]
+        elif col1 == col2:
+            result += matrix[(row1+1)%5][col1] + matrix[(row2+1)%5][col2]
+        else:
+            result += matrix[row1][col2] + matrix[row2][col1]
+    return result
+
+msg = input("Enter plaintext: ")
+key = input("Enter keyword: ")
+
+print("Encrypted:", playfair_encrypt(msg, key))
+

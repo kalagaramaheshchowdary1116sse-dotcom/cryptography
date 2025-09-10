@@ -1,0 +1,42 @@
+SIZE = 5
+matrix = []
+
+def generate_key_matrix(key):
+    used = set()
+    key = key.upper().replace("J", "I")
+    seq = key + "ABCDEFGHIKLMNOPQRSTUVWXYZ"
+    for ch in seq:
+        if ch not in used and ch.isalpha():
+            used.add(ch)
+            matrix.append(ch)
+
+def find_position(ch):
+    if ch == 'J': ch = 'I'
+    idx = matrix.index(ch)
+    return divmod(idx, SIZE)
+
+def decrypt_pair(a, b):
+    r1, c1 = find_position(a)
+    r2, c2 = find_position(b)
+    if r1 == r2:
+        return matrix[r1*SIZE + (c1-1)%SIZE] + matrix[r2*SIZE + (c2-1)%SIZE]
+    elif c1 == c2:
+        return matrix[((r1-1)%SIZE)*SIZE + c1] + matrix[((r2-1)%SIZE)*SIZE + c2]
+    else:
+        return matrix[r1*SIZE + c2] + matrix[r2*SIZE + c1]
+
+def decrypt_message(ciphertext):
+    res = ""
+    for i in range(0, len(ciphertext), 2):
+        res += decrypt_pair(ciphertext[i], ciphertext[i+1])
+    return res
+
+keyword = "PLAYFAIR"
+ciphertext = ("KXJEYUREBEZWEHEWRYTUHEYFS"
+              "KREHEGOYFIWTTTUOLKSYCAJPO"
+              "BOTEIZONTXBYBNTGONEYCUZWR"
+              "GDSONSXBOUYWRHEBAAHYUSEDQ")
+
+generate_key_matrix(keyword)
+print("Decrypted Text:", decrypt_message(ciphertext))
+

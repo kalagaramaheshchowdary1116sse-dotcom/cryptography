@@ -1,0 +1,18 @@
+import string
+
+def mono_encrypt(text, key_map):
+    return "".join(key_map.get(ch, ch) for ch in text.lower())
+
+def mono_decrypt(cipher, key_map):
+    reverse_map = {v: k for k, v in key_map.items()}
+    return "".join(reverse_map.get(ch, ch) for ch in cipher)
+
+plain = string.ascii_lowercase
+cipher_alph = input("Enter substitution alphabet (26 letters): ").lower()
+key_map = dict(zip(plain, cipher_alph))
+
+text = input("Enter plaintext: ")
+enc = mono_encrypt(text, key_map)
+print("Encrypted:", enc)
+print("Decrypted:", mono_decrypt(enc, key_map))
+

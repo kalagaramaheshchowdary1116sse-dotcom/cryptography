@@ -1,0 +1,18 @@
+P = 23  # prime
+G = 5   # primitive root
+
+a = 6   # Alice’s private
+b = 15  # Bob’s private
+
+A = pow(G, a, P)
+B = pow(G, b, P)
+
+Ka = pow(B, a, P)
+Kb = pow(A, b, P)
+
+print("Public values: P =", P, "G =", G)
+print("Alice Private:", a, "Public:", A)
+print("Bob Private:", b, "Public:", B)
+print("Shared Secret (Alice):", Ka)
+print("Shared Secret (Bob):", Kb)
+

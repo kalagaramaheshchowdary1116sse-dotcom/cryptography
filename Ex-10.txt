@@ -1,0 +1,49 @@
+SIZE = 5
+matrix = [
+    ['M','F','H','I','K'],
+    ['U','N','O','P','Q'],
+    ['Z','V','W','X','Y'],
+    ['E','L','A','R','G'],
+    ['D','S','T','B','C']
+]
+
+def find_position(ch):
+    if ch == 'J': ch = 'I'
+    for i in range(SIZE):
+        for j in range(SIZE):
+            if matrix[i][j] == ch:
+                return i, j
+
+def encrypt_pair(a, b):
+    r1, c1 = find_position(a)
+    r2, c2 = find_position(b)
+    if r1 == r2:
+        return matrix[r1][(c1+1)%SIZE] + matrix[r2][(c2+1)%SIZE]
+    elif c1 == c2:
+        return matrix[(r1+1)%SIZE][c1] + matrix[(r2+1)%SIZE][c2]
+    else:
+        return matrix[r1][c2] + matrix[r2][c1]
+
+def prepare_text(text):
+    clean = [ch.upper().replace("J","I") for ch in text if ch.isalpha()]
+    pairs = []
+    i = 0
+    while i < len(clean):
+        a = clean[i]
+        b = clean[i+1] if i+1 < len(clean) else 'X'
+        if a == b:
+            b = 'X'
+            i += 1
+        else:
+            i += 2
+        pairs.append((a,b))
+    return pairs
+
+def encrypt_message(text):
+    pairs = prepare_text(text)
+    return "".join(encrypt_pair(a,b) for a,b in pairs)
+
+msg = "Must see you over Cadogan West. Coming at once."
+print("Original:", msg)
+print("Encrypted:", encrypt_message(msg))
+

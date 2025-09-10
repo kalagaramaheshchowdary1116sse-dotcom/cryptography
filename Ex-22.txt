@@ -1,0 +1,13 @@
+import hmac
+import hashlib
+
+message = input("Enter message: ")
+key = input("Enter key: ")
+
+mac = hmac.new(key.encode(), message.encode(), hashlib.sha1).hexdigest()
+print("HMAC-SHA1:", mac)
+
+# Verify
+verify = hmac.new(key.encode(), message.encode(), hashlib.sha1).hexdigest()
+print("Verification:", "Valid" if mac == verify else "Invalid")
+

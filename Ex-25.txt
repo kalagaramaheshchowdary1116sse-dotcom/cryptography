@@ -1,0 +1,22 @@
+def detect_intrusion(logs):
+    suspicious_keywords = ["failed login", "unauthorized", "malware", "attack"]
+    alerts = []
+    for line in logs:
+        for word in suspicious_keywords:
+            if word in line.lower():
+                alerts.append(line)
+    return alerts
+
+# Example log input
+logs = [
+    "User admin logged in successfully",
+    "Failed login attempt from 192.168.1.5",
+    "Unauthorized access detected",
+    "Normal operation"
+]
+
+alerts = detect_intrusion(logs)
+print("Intrusion Alerts:")
+for alert in alerts:
+    print(">>", alert)
+
